@@ -31,11 +31,15 @@ const adjustBg = (element, pkmn) => {
 const renderCards = (arr) => {
   for (let i = 0; i < arr.length; i++) {
     const { id, name, type, base } = arr[i];
+    const currPkmn = arr[i];
 
     const addToFavs = () => {
-      const current = localStorage.getItem('favourites');
-      console.log(JSON.parse(current));
-      localStorage.setItem('favourites', JSON.stringify([arr[i]]));
+      let favs = JSON.parse(localStorage.getItem('favourites'));
+      if (favs.includes(currPkmn)) {
+        favs.splice(favs.indexOf(currPkmn), 1);
+        return;
+      }
+      favs.push(currPkmn);
     };
 
     //make container
