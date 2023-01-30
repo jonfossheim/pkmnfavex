@@ -3,9 +3,11 @@ import { pokemon } from './pokemon.js';
 const main = document.querySelector('main');
 main.classList.add('wrapper');
 
+const favKey = 'favourites';
+
 const lsArr = [];
-if (!localStorage.getItem('favourites')) {
-  localStorage.setItem('favourites', JSON.stringify(lsArr));
+if (!localStorage.getItem(favKey)) {
+  localStorage.setItem(favKey, JSON.stringify(lsArr));
 }
 
 const adjustBg = (element, pkmn) => {
@@ -28,6 +30,19 @@ const adjustBg = (element, pkmn) => {
   element.style.backgroundColor = selectedColor;
 };
 
+const updateArray = (array, obj) => {
+  const index = array.findIndex((elem) => elem.id === obj.id);
+  if (index === -1) {
+    array.push(obj);
+    localStorage.setItem(favKey, JSON.stringify(array));
+    console.log('removed from array');
+  } else {
+    array.splice(index, 1);
+    localStorage.setItem(favKey, JSON.stringify(array));
+    console.log('added to array');
+  }
+};
+
 const renderCards = (arr) => {
   for (let i = 0; i < arr.length; i++) {
     const { id, name, type, base } = arr[i];
@@ -35,11 +50,7 @@ const renderCards = (arr) => {
 
     const addToFavs = () => {
       let favs = JSON.parse(localStorage.getItem('favourites'));
-      if (favs.includes(currPkmn)) {
-        favs.splice(favs.indexOf(currPkmn), 1);
-        return;
-      }
-      favs.push(currPkmn);
+      updateArray(favs, currPkmn);
     };
 
     //make container
