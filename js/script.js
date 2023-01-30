@@ -35,11 +35,9 @@ const updateArray = (array, obj) => {
   if (index === -1) {
     array.push(obj);
     localStorage.setItem(favKey, JSON.stringify(array));
-    console.log('removed from array');
   } else {
     array.splice(index, 1);
     localStorage.setItem(favKey, JSON.stringify(array));
-    console.log('added to array');
   }
 };
 
