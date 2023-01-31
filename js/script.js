@@ -1,54 +1,21 @@
 import { pokemon } from './pokemon.js';
+import { adjustBg, updateArray, favKey } from './utils.js';
 
-const main = document.querySelector('main');
+let main = document.querySelector('.main');
 main.classList.add('wrapper');
-
-const favKey = 'favourites';
 
 const lsArr = [];
 if (!localStorage.getItem(favKey)) {
   localStorage.setItem(favKey, JSON.stringify(lsArr));
 }
 
-const adjustBg = (element, pkmn) => {
-  let selectedColor;
-  switch (pkmn.type[0]) {
-    case 'Water':
-      selectedColor = '#0984e3';
-      break;
-    case 'Fire':
-      selectedColor = '#d63031';
-      break;
-    case 'Grass':
-      selectedColor = '#00b894';
-      break;
-    default:
-      selectedColor = 'white';
-      break;
-  }
-
-  element.style.backgroundColor = selectedColor;
-};
-
-const updateArray = (array, obj) => {
-  const index = array.findIndex((elem) => elem.id === obj.id);
-  if (index === -1) {
-    array.push(obj);
-    localStorage.setItem(favKey, JSON.stringify(array));
-  } else {
-    array.splice(index, 1);
-    localStorage.setItem(favKey, JSON.stringify(array));
-  }
-};
-
 const renderCards = (arr) => {
-  for (let i = 0; i < arr.length; i++) {
-    const { id, name, type, base } = arr[i];
-    const currPkmn = arr[i];
+  arr.forEach((pkmn) => {
+    const { id, name, type, base } = pkmn;
 
     const addToFavs = () => {
-      let favs = JSON.parse(localStorage.getItem('favourites'));
-      updateArray(favs, currPkmn);
+      let favs = JSON.parse(localStorage.getItem(favKey));
+      updateArray(favs, pkmn);
     };
 
     //make container
@@ -148,7 +115,7 @@ const renderCards = (arr) => {
     main.appendChild(container);
 
     // Adjust Background based on type:
-    adjustBg(container, arr[i]);
-  }
+    adjustBg(container, pkmn);
+  });
 };
 renderCards(pokemon);
